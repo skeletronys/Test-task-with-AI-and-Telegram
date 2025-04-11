@@ -21,7 +21,7 @@ def load_vector_store():
     texts = text_splitter.split_text(content)
 
     if not texts:
-        raise ValueError(" Текст не розбито на частини. Перевір знання.")
+        raise ValueError(" Текст не розбито на частини. Перевір файл з інформацією.")
 
     # create documeent
     documents = [Document(page_content=t) for t in texts]
