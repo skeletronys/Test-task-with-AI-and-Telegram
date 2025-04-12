@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from agent.langchain_agent import create_agent
 from agent.search_tool import search_google
+from agent.auto_ria_api import find_auto
 
 load_dotenv()
 
@@ -14,6 +15,24 @@ agent = create_agent()
 
 # save session
 user_sessions = {}
+
+
+@bot.message_handler(commands=["find"])
+def find_handler(message):
+    user_id = message.chat.id
+    query = message.text.replace("/find", "").strip()
+
+    if not query:
+        bot.send_message(user_id, "Введи запит, наприклад:\n/find Tesla Model 3, від 2020, до 50000, електро")
+        return
+
+    bot.send_message(user_id, f"Шукаю авто: {query}")
+    try:
+        result = find_auto(query)
+        bot.send_message(user_id, result)
+    except Exception as e:
+        print(f"[FIND ERROR] {e}")
+        bot.send_message(user_id, "Сталася помилка під час пошуку")
 
 
 @bot.message_handler(commands=["start"])
